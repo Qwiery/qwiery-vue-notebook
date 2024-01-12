@@ -1,8 +1,7 @@
 <template>
   <div>
     <div v-for="cell in cells" :key="cell.message.id">
-        <NotebookCellRendering :cell="cell" />
-
+        <NotebookCellRendering :cell="cell" :controller="controller" />
     </div>
   </div>
 </template>
@@ -21,10 +20,11 @@ function refreshAll() {
   
 }
 
-onMounted(() => {});
+onMounted(() => {
+  controller.on("new-cell", refreshAll);
+});
 function addCell() {
   controller.addInputCell();
-  refreshAll();
 }
 defineExpose({
   addCell,
