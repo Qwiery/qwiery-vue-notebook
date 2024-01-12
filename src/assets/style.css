@@ -1,0 +1,7 @@
+.cell-input{
+    width: 100%;
+    border:1px solid blue;
+    border-radius: 2px;
+    margin:5px 0;
+    padding: 5px;
+}
