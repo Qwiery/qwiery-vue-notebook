@@ -9,7 +9,7 @@ import {
 export class NotebookController extends eventemitter3 {
   public model: Notebook = new Notebook();
   public counter: number = 0;
-
+  public focusId: string | null = null;
   constructor() {
     super();
   }
@@ -66,5 +66,10 @@ export class NotebookController extends eventemitter3 {
   }
   public get cells() {
     return this.model.cells;
+  }
+  public setFocus(id: string | null) {
+    
+    this.focusId = id;
+    this.emit("focus", id);
   }
 }

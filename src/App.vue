@@ -1,6 +1,7 @@
 <template>
-  <div>
-    <button @click="addCell()">Add cell</button>
+  <div class="w-full bg-gray-300 dark:bg-[#333]">
+    <button @click="addCell()" >Add cell</button>
+    <button @click="toggleTheme()" >Toggle Theme</button>
   </div>
   <div style="position: absolute; top: 200px; left: 200px; width: 900px">
     <Notebook ref="nb" />
@@ -20,4 +21,7 @@ function addCell() {
     notebook.addCell();
   }
 }
+function toggleTheme() {
+  document.body.classList.toggle("dark");
+} 
 </script>

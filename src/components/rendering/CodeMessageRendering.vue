@@ -2,7 +2,7 @@
   <input
     type="text"
     :value="props.message.code"
-    class="input-code"
+    class="!w-[100%] bg-transparent dark:text-white/50 font-mono outline-none"
     @keydown="keydown($event)"
   />
 </template>

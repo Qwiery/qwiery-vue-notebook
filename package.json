@@ -42,17 +42,21 @@
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^4.5.2",
-    "jest": "^29.7.0",
+    "autoprefixer": "^10.4.16",
+    "postcss": "^8.4.33",
+    "tailwindcss": "^3.4.1",
     "vite": "^5.0.8",
     "vite-plugin-dts": "^3.6.4",
     "vite-plugin-node-polyfills": "^0.17.0",
     "vitest": "^1.1.0"
   },
   "wallaby": {
-    "autoDetect": ["vitest"],
-    "files": [ 
-      "src/**/*.ts",      
-      "src/**/*.vue"      
+    "autoDetect": [
+      "vitest"
+    ],
+    "files": [
+      "src/**/*.ts",
+      "src/**/*.vue"
     ]
   }
 }
