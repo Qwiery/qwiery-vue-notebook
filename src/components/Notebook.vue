@@ -1,7 +1,11 @@
 <template>
   <div>
     <div v-for="cell in cells" :key="cell.message.id">
-        <NotebookCellRendering :cell="cell" :controller="controller" :hasFocus="cell.hasFocus"/>
+      <NotebookCellRendering
+        :cell="cell"
+        :controller="controller"
+        :hasFocus="cell.hasFocus"
+      />
     </div>
   </div>
 </template>
@@ -16,8 +20,7 @@ const controller: NotebookController = new NotebookController();
 const cells: NotebookCell[] = ref([]);
 function refreshAll() {
   cells.value = [];
-  cells.value=controller.cells
-  
+  cells.value = controller.cells;
 }
 
 onMounted(() => {
@@ -29,7 +32,7 @@ function addCell() {
   controller.addInputCell();
 }
 function setFocus(cellId) {
- controller.cells.forEach((cell) => {
+  controller.cells.forEach((cell) => {
     if (cell.message.id === cellId) {
       cell.hasFocus = true;
     } else {

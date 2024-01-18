@@ -1,26 +1,45 @@
 <template>
-    <div v-if="cell.direction === 'input'" @click="setFocus()" class="w-full my-2">
-        <div class="flex">
-            <div v-if="(cell.cellId || 'aaa').length > 0">
-                <div class="my-2   text-gray-500 w-max min-w-20">[In 255]</div>
-            </div>
-            <div class="border-l-4 w-full p-2 dark:bg-[#333] bg-gray-100" :class="{
-              'border-l-gray-500': !props.hasFocus,
-              'border-l-green-500': props.hasFocus,
-            }">
-                <div v-if="props.cell.message.typeName == 'CodeMessage'">
-                    <CodeMessageRendering :message="props.cell.message" :controller="props.controller" />
-                </div>
-            </div>
+  <div
+    v-if="cell.direction === 'input'"
+    @click="setFocus()"
+    class="w-full my-2"
+  >
+    <div class="flex">
+      <div v-if="(cell.cellId || 'aaa').length > 0">
+        <div class="my-2 text-gray-500 w-max min-w-20">[In 255]</div>
+      </div>
+      <div
+        class="border-l-4 w-full p-2 dark:bg-[#333] bg-gray-100"
+        :class="{
+          'border-l-gray-500': !props.hasFocus,
+          'border-l-green-500': props.hasFocus,
+        }"
+      >
+        <div v-if="props.cell.message.typeName == 'CodeMessage'">
+          <CodeMessageRendering
+            :message="props.cell.message"
+            :controller="props.controller"
+          />
         </div>
-        <div class="flex" v-if="hasFocus">
-            <div class="my-0 m-15 text-gray-500 w-max min-w-20">&nbsp;</div>
-            <div class=" w-full dark:bg-[#666] bg-gray-200 ">
-                <div class="grid grid-cols-10">
-                    <div class="ml-3">Image</div>
-                    <div class="ml-3">Ad</div>
-                    <div class=" col-start-11 m-1 ">
-                        <svg @click="deleteCell()" style="cursor: pointer;" title="Delete cell" fill="#000000" width="12px" height="12px" viewBox="-2.94 0 31.716 31.716" xmlns="http://www.w3.org/2000/svg">
+      </div>
+    </div>
+    <div class="flex" v-if="hasFocus">
+      <div class="my-0 m-15 text-gray-500 w-max min-w-20">&nbsp;</div>
+      <div class="w-full dark:bg-[#666] bg-gray-200">
+        <div class="grid grid-cols-10">
+          <div class="ml-3">Image</div>
+          <div class="ml-3">Ad</div>
+          <div class="col-start-11 m-1">
+            <svg
+              @click="deleteCell()"
+              style="cursor: pointer"
+              title="Delete cell"
+              fill="#000000"
+              width="12px"
+              height="12px"
+              viewBox="-2.94 0 31.716 31.716"
+              xmlns="http://www.w3.org/2000/svg"
+            >
               <g>
                 <g transform="translate(-355.957 -579)">
                   <path
@@ -41,30 +60,34 @@
                 </g>
               </g>
             </svg>
-                    </div>
-                </div>
-    
-    
-            </div>
+          </div>
         </div>
+      </div>
     </div>
-    <div v-else>
-        <div style="display: flex">
-            <div v-if="(cell.cellId || 'aa').length > 0">
-                <div class="w-max min-w-20 my-2 text-gray-500">
-                    [Out {{ cell.cellId }}]
-                </div>
-            </div>
-            <div class="cell-output">
-                <div v-if="props.cell.message.typeName == 'CodeMessage'">
-                    <CodeMessageRendering :message="props.cell.message" direction="output" />
-                </div>
-                <div v-if="props.cell.message.typeName == 'TextMessage'">
-                    <TextMessageRendering :message="props.cell.message" direction="output" />
-                </div>
-            </div>
+  </div>
+  <div v-else>
+    <div style="display: flex">
+      <div v-if="(cell.cellId || 'aa').length > 0">
+        <div class="w-max min-w-20 my-2 text-gray-500">
+          [Out {{ cell.cellId }}]
         </div>
+      </div>
+      <div class="cell-output">
+        <div v-if="props.cell.message.typeName == 'CodeMessage'">
+          <CodeMessageRendering
+            :message="props.cell.message"
+            direction="output"
+          />
+        </div>
+        <div v-if="props.cell.message.typeName == 'TextMessage'">
+          <TextMessageRendering
+            :message="props.cell.message"
+            direction="output"
+          />
+        </div>
+      </div>
     </div>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -77,29 +100,29 @@ import { NotebookController } from "../NotebookController";
 //   return props.cell.hasFocus;
 // })
 const props = defineProps({
-    cell: {
-        type: NotebookCell,
-        required: true,
-    },
-    controller: {
-        type: NotebookController,
-        required: true,
-    },
-    hasFocus: {
-        type: Boolean,
-        required: false,
-    },
+  cell: {
+    type: NotebookCell,
+    required: true,
+  },
+  controller: {
+    type: NotebookController,
+    required: true,
+  },
+  hasFocus: {
+    type: Boolean,
+    required: false,
+  },
 });
 onMounted(() => {
-    // hasFocus.value = props.cell.hasFocus;
+  // hasFocus.value = props.cell.hasFocus;
 });
 
 function setFocus() {
-    // hasFocus.value = true;
-    props.controller.setFocus(props.cell.message.id);
+  // hasFocus.value = true;
+  props.controller.setFocus(props.cell.message.id);
 }
 
 function deleteCell() {
-    props.controller.deleteCell(props.cell.message.id);
+  props.controller.deleteCell(props.cell.message.id);
 }
 </script>

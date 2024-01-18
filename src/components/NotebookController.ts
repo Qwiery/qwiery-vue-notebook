@@ -21,11 +21,7 @@ export class NotebookController extends eventemitter3 {
     if (message === null) {
       message = new CodeMessage("Some code here " + Math.random());
     }
-    const cell = new NotebookCell(
-      this.model,
-      message,
-      "input"
-    );
+    const cell = new NotebookCell(this.model, message, "input");
     this.model.addCell(cell, cellId, beforeOrAfter);
     this.emit("new-cell", cell);
   }
@@ -45,7 +41,7 @@ export class NotebookController extends eventemitter3 {
       let time = date.toLocaleTimeString([], {
         hour: "2-digit",
         minute: "2-digit",
-        second: "2-digit",  
+        second: "2-digit",
       });
       message = new TextMessage(
         `This is the output of input ${inputCell.index} at ${time}.`
@@ -55,7 +51,7 @@ export class NotebookController extends eventemitter3 {
       this.model,
       message,
       "output",
-      inputCell.id.toString() 
+      inputCell.id.toString()
     );
     cell.inputCellId = inputCell.id;
     this.model.addCell(cell, cellId, "after");
@@ -65,7 +61,6 @@ export class NotebookController extends eventemitter3 {
     return this.model.cells;
   }
   public setFocus(id: string | null) {
-    
     this.focusId = id;
     this.emit("focus", id);
   }
