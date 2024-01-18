@@ -24,9 +24,7 @@ export class NotebookController extends eventemitter3 {
     const cell = new NotebookCell(
       this.model,
       message,
-      "input",
-      (++this.counter).toString(),
-      message.id
+      "input"
     );
     this.model.addCell(cell, cellId, beforeOrAfter);
     this.emit("new-cell", cell);
@@ -57,8 +55,7 @@ export class NotebookController extends eventemitter3 {
       this.model,
       message,
       "output",
-      inputCell.index.toString(),
-      message.id
+      inputCell.id.toString() 
     );
     cell.inputCellId = inputCell.id;
     this.model.addCell(cell, cellId, "after");
@@ -71,5 +68,9 @@ export class NotebookController extends eventemitter3 {
     
     this.focusId = id;
     this.emit("focus", id);
+  }
+  public deleteCell(id: string) {
+    this.model.deleteInput(id);
+    this.emit("delete-cell", id);
   }
 }

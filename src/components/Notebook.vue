@@ -23,6 +23,7 @@ function refreshAll() {
 onMounted(() => {
   controller.on("new-cell", refreshAll);
   controller.on("focus", setFocus);
+  controller.on("delete-cell", refreshAll);
 });
 function addCell() {
   controller.addInputCell();

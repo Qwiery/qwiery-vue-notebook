@@ -1,10 +1,13 @@
 <template>
-  <input
+  <input v-if="props.direction === 'input'"
     type="text"
     :value="props.message.text"
     class="input-text"
     @keydown="keydown($event)"
   />
+  <div v-else>
+    <p class="text-blue-600 my-5">{{ props.message.text }}</p>
+  </div>
 </template>
 <script setup lang="ts">
 import { TextMessage } from "@orbifold/entities";
@@ -26,5 +29,10 @@ const props = defineProps({
     type: NotebookController,
     required: true,
   },
+  direction:{
+    type: String,
+    required: false,
+    default: "input"
+  }
 });
 </script>
