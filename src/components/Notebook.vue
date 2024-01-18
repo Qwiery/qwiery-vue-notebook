@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-for="cell in cells" :key="cell.message.id">
+    <div v-for="cell in cells" :key="cell.cellId">
       <NotebookCellRendering
         :cell="cell"
         :controller="controller"
@@ -27,6 +27,10 @@ onMounted(() => {
   controller.on("new-cell", refreshAll);
   controller.on("focus", setFocus);
   controller.on("delete-cell", refreshAll);
+  controller.on("cellId", (u) => {
+    const {messageId, cellId} = u;
+    setCellId(messageId, cellId);
+  });
 });
 function addCell() {
   controller.addInputCell();
@@ -39,6 +43,16 @@ function setFocus(cellId) {
       cell.hasFocus = false;
     }
   });
+  refreshAll();
+}
+function setCellId(messageId, cellId) {
+  // controller.cells.forEach((cell) => {
+  //   if (cell.message.id === messageId) {
+  //     cell.cellId = cellId;
+  //   }
+  // });
+  // console.log(controller.cells.map((c) => c.cellId));
+  
   refreshAll();
 }
 defineExpose({

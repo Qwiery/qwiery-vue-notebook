@@ -4,9 +4,13 @@
     @click="setFocus()"
     class="w-full my-2"
   >
+ 
     <div class="flex">
-      <div v-if="(cell.cellId || 'aaa').length > 0">
-        <div class="my-2 text-gray-500 w-max min-w-20">[In 255]</div>
+      <div v-if="cellId">
+        <div class="my-2 text-gray-500 w-max min-w-20">[In {{ cellId }}]</div>
+      </div>
+      <div v-else>
+        <div class="my-2 text-gray-500 w-max min-w-20">[ ]</div>
       </div>
       <div
         class="border-l-4 w-full p-2 dark:bg-[#333] bg-gray-100"
@@ -67,9 +71,14 @@
   </div>
   <div v-else>
     <div style="display: flex">
-      <div v-if="(cell.cellId || 'aa').length > 0">
+      <div v-if="cellId">
         <div class="w-max min-w-20 my-2 text-gray-500">
-          [Out {{ cell.cellId }}]
+          [Out {{ cellId }}]
+        </div>
+      </div>
+      <div v-else>
+        <div class="w-max min-w-20 my-2 text-gray-500">
+          [ ]
         </div>
       </div>
       <div class="cell-output">
@@ -91,7 +100,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref } from "vue";
+import { computed, onMounted, ref, watch,toRefs } from "vue";
 import { NotebookCell } from "@orbifold/entities";
 import CodeMessageRendering from "./CodeMessageRendering.vue";
 import TextMessageRendering from "./TextMessageRendering.vue";
@@ -113,8 +122,22 @@ const props = defineProps({
     required: false,
   },
 });
+const cellId = computed(() => {
+  console.log(">>", props.cell.cellId);  
+  return props.cell.cellId;
+});
+// const {cellId} = toRefs(props.cell);
+// watch(
+//     ()=>props.cell,
+//     (newVal) => {
+//       cellId.value = newVal.cellId||"";
+//     },
+//     { immediate: true, deep: true }
+//   );
+
 onMounted(() => {
   // hasFocus.value = props.cell.hasFocus;
+ 
 });
 
 function setFocus() {

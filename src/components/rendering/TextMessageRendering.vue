@@ -6,7 +6,7 @@
     @keydown="keydown($event)"
   />
   <div v-else>
-    <p class="text-blue-600 my-5">{{ props.message.text }}</p>
+    <p class="text-blue-600 my-2">{{ props.message.text }}</p>
   </div>
 </template>
 <script setup lang="ts">

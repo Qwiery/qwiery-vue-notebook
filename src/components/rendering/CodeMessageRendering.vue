@@ -19,7 +19,7 @@ function keydown(event: KeyboardEvent) {
   if (event.key === "a" && event.ctrlKey) {
     props.controller.addInputCell(null, props.message.id, "after");
   }else if(event.key === "Enter" && event.shiftKey){
-    props.controller.addOutputCell(CodeMessage.fromString("console.log(23)"), props.message.id);
+    props.controller.executeCell(props.message);
   }
 }
 const props = defineProps({

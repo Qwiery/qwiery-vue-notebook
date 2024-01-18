@@ -6,6 +6,7 @@ import {
   NotebookCell,
   TextMessage,
 } from "@orbifold/entities";
+import { FakeInterpreter } from "../interprete/fake/FakeInterpreter";
 export class NotebookController extends eventemitter3 {
   public model: Notebook = new Notebook();
   public counter: number = 0;
@@ -56,6 +57,7 @@ export class NotebookController extends eventemitter3 {
     cell.inputCellId = inputCell.id;
     this.model.addCell(cell, cellId, "after");
     this.emit("new-cell", cell);
+    return cell;
   }
   public get cells() {
     return this.model.cells;
@@ -67,5 +69,19 @@ export class NotebookController extends eventemitter3 {
   public deleteCell(id: string) {
     this.model.deleteInput(id);
     this.emit("delete-cell", id);
+  }
+  public setCellId(messageId:string, cellId:string){
+    this.model.cells.find(m=>m.id === messageId).cellId = cellId;
+    this.emit("cellId", {messageId,cellId} );
+  }
+  public async executeCell(message:Message) {
+    await new Promise(r => setTimeout(r, 2000));
+    const executionId = Math.random().toString().substring(2, 4);
+    this.setCellId(message.id, executionId);
+    const p =new FakeInterpreter();
+    const a = await p.execute(message);
+    const c = this.addOutputCell(a, message.id  );
+    c.cellId = executionId;
+    this.emit("execute-cell", message );
   }
 }
