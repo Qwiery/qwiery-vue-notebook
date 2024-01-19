@@ -15,9 +15,10 @@
 </template>
 <script setup lang="ts">
 // import Notebook from "@/components/Notebook.vue";
-import { Message } from "@orbifold/entities";
+import { Message,MarkdownMessage } from "@orbifold/entities";
 import { onMounted, ref } from "vue";
 import _ from "lodash";
+import MarkdownMessageRendering from "./components/rendering/MarkdownMessageRendering.vue";
 const nb = ref(null);
 let notebook: any | null = null;
 onMounted(() => {
@@ -28,7 +29,7 @@ onMounted(() => {
 
 function addCell() {
   if (notebook) {
-    notebook.addCell(null, null, "after", _.sample([1, 2, 3, 4]));
+    notebook.addCell(new MarkdownMessage("# Aah"), null, "after", _.sample([1, 2, 3, 4]));
   }
 }
 function toggleTheme() {
@@ -40,12 +41,12 @@ function toggleView() {
   }
 }
 function createStuff() {
-  _.range(_.random(1, 10)).forEach((i) => {
-    addCell();
-  });
-  setInterval(() => {
-    const cellId = _.sample(notebook.getInputCellIds());
-    notebook.executeCell(cellId);
-  }, 1000 + Math.random() * 2000);
+  // _.range(_.random(1, 10)).forEach((i) => {
+  //   addCell();
+  // });
+  // setTimeout(() => {
+  //   const cellId = _.sample(notebook.getInputCellIds());
+  //   notebook.executeCell(cellId);
+  // }, 1000 + Math.random() * 2000);
 }
 </script>

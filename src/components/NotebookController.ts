@@ -173,6 +173,9 @@ export class NotebookController extends eventemitter3 {
     this._currentView = v;
     this.emit("change-view", v);
   }
+  public  getMessages(){
+    return this.model.cells.map((m) => m.message);
+  }
   /**
    * Executes a cell by processing the provided message.
    * - the In/Out prefix is dynamic, you could change this in function of the interpreter
@@ -185,7 +188,7 @@ export class NotebookController extends eventemitter3 {
     this.emit("before-execute", message);
 
     // todo: remove in production
-    await new Promise((r) => setTimeout(r, 2000)); // simulate delay
+    // await new Promise((r) => setTimeout(r, 2000)); // simulate delay
     const p = new FakeInterpreter();
     const a = await p.execute(message);
     const c = this.addOutputCell(a, message.id);

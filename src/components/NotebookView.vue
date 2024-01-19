@@ -3,7 +3,7 @@
     <div
       v-for="tuple in groupedCells"
       :key="tuple[0].executionId + tuple[0].hasHighlight + tuple[0].message.id"
-      class="bg-gray-300 dark:bg-[#333] p-2 border-slate-600 border-1 rounded"
+      class=""
       :class="{
         hidden: tuple.length === 1 && currentView === 'dashboard',
         'col-span-1': tuple[0].colSpan === 1,
@@ -93,7 +93,7 @@ function refreshAll() {
 
 onMounted(() => {
   controller.on("new-cell", refreshAll);
-  // controller.on("focus", setFocus);
+  controller.on("focus", setFocus);
   controller.on("delete-cell", refreshAll);
   controller.on("cellId", refreshAll);
   controller.on("before-execute", beforeExecute);
@@ -101,6 +101,9 @@ onMounted(() => {
   controller.on("change-view", changeView);
 });
 
+function getMessages(){
+  return controller.getMessages();
+}
 /**
  * Adds a cell to the notebook view.
  */
@@ -173,6 +176,7 @@ defineExpose({
   getInputCellIds,
   setView,
   getView,
+  getMessages
 });
 // const props = defineProps({
 //   view: {

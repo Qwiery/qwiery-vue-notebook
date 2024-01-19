@@ -38,7 +38,8 @@
     "@orbifold/entities": "latest",
     "eventemitter3": "5.0.1",
     "lodash": "^4.17.21",
-    "vue": "^3.3.11"
+    "vue": "^3.3.11",
+    "markdown-it": "14.0.0"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^4.5.2",
