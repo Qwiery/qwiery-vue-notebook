@@ -2,6 +2,7 @@
   <div class="w-full bg-gray-300 dark:bg-[#333]">
     <button @click="addCell()">Add cell</button>
     <button @click="toggleTheme()">Toggle Theme</button>
+    <button @click="toggleView()">Toggle View</button>
   </div>
 
   <div class="flex justify-center items-center w-screen h-screen">
@@ -33,6 +34,11 @@ function addCell() {
 function toggleTheme() {
   document.body.classList.toggle("dark");
 }
+function toggleView() {
+  if (notebook) {
+    notebook.setView(notebook.getView() === "default" ? "dashboard" : "default");
+  }
+}
 function createStuff() {
   _.range(_.random(1, 10)).forEach((i) => {
     addCell();
@@ -40,6 +46,6 @@ function createStuff() {
   setInterval(() => {
     const cellId = _.sample(notebook.getInputCellIds());
     notebook.executeCell(cellId);
-  }, 1000+Math.random() * 2000);
+  }, 1000 + Math.random() * 2000);
 }
 </script>

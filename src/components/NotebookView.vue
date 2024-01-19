@@ -5,6 +5,7 @@
       :key="tuple[0].executionId + tuple[0].hasHighlight + tuple[0].message.id"
       class="bg-gray-300 dark:bg-[#333] p-2 border-slate-600 border-1 rounded"
       :class="{
+        hidden: tuple.length === 1 && currentView === 'dashboard',
         'col-span-1': tuple[0].colSpan === 1,
         'col-span-2': tuple[0].colSpan === 2,
         'col-span-3': tuple[0].colSpan === 3,
@@ -12,33 +13,44 @@
       }"
     >
       <div>
-        <template v-if="tuple.length === 1">
-          <NotebookCellRendering
-            :hasHighlight="tuple[0].hasHighlight"
-            :cell="tuple[0]"
-            :controller="controller"
-            :hasFocus="tuple[0].hasFocus"
-          />
+        <template v-if="currentView === 'default'">
+          <template v-if="tuple.length === 1">
+            <NotebookCellRendering
+              :hasHighlight="tuple[0].hasHighlight"
+              :cell="tuple[0]"
+              :controller="controller"
+              :hasFocus="tuple[0].hasFocus"
+            />
+          </template>
+          <template v-else>
+            <NotebookCellRendering
+              :hasHighlight="tuple[0].hasHighlight"
+              :cell="tuple[0]"
+              :controller="controller"
+              :hasFocus="tuple[0].hasFocus"
+            />
+            <NotebookCellRendering
+              :cell="tuple[1]"
+              :controller="controller"
+              :hasFocus="tuple[1].hasFocus"
+            />
+          </template>
         </template>
-        <template v-else>
-          <NotebookCellRendering
-            :hasHighlight="tuple[0].hasHighlight"
-            :cell="tuple[0]"
-            :controller="controller"
-            :hasFocus="tuple[0].hasFocus"
-          />
-          <NotebookCellRendering
-            :cell="tuple[1]"
-            :controller="controller"
-            :hasFocus="tuple[1].hasFocus"
-          />
+        <template v-if="currentView === 'dashboard'">
+          <template v-if="tuple.length === 2">
+            <NotebookCellRendering
+              :cell="tuple[1]"
+              :controller="controller"
+              :hasFocus="tuple[1].hasFocus"
+            />
+          </template>
         </template>
       </div>
     </div>
   </div>
 </template>
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 import { NotebookController } from "./NotebookController";
 import NotebookCellRendering from "./rendering/NotebookCellRendering.vue";
 import "../assets/style.css";
@@ -48,6 +60,7 @@ const controller: NotebookController = new NotebookController();
 const cells: NotebookCell[] = ref([]);
 
 const groupedCells = ref([]);
+const currentView = ref("default");
 
 /**
  * Re-renders the notebook.
@@ -85,6 +98,7 @@ onMounted(() => {
   controller.on("cellId", refreshAll);
   controller.on("before-execute", beforeExecute);
   controller.on("after-execute", afterExecute);
+  controller.on("change-view", changeView);
 });
 
 /**
@@ -98,7 +112,9 @@ function addCell(
 ) {
   controller.addCell(message, cellId, beforeOrAfter, colSpan);
 }
-
+function changeView(view: string) {
+  currentView.value = view;
+}
 function setFocus(cellId) {
   controller.cells.forEach((cell) => {
     if (cell.message.id === cellId) {
@@ -137,6 +153,13 @@ function executeCell(u: string | Message) {
     }
   }
 }
+function setView(view: string = "default") {
+  if (!view) return;
+  controller.view = view;
+}
+function getView() {
+  return controller.view;
+}
 /**
  * Expose the functions to the outside world.
  */
@@ -148,5 +171,14 @@ defineExpose({
   setExecutionId,
   executeCell,
   getInputCellIds,
+  setView,
+  getView,
 });
+// const props = defineProps({
+//   view: {
+//     type: String,
+//     required: false,
+//     default: "default",
+//   },
+// });
 </script>

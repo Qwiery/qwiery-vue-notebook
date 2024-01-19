@@ -25,6 +25,7 @@ export class NotebookController extends eventemitter3 {
    */
   private focusId: string | null = null;
 
+  private _currentView: string = "default";
   constructor() {
     super();
   }
@@ -121,7 +122,7 @@ export class NotebookController extends eventemitter3 {
     this.emit("delete-cell", id);
   }
 
-  public updateCell(  message: Message) {
+  public updateCell(message: Message) {
     this.model.updateCell(message);
     this.emit("update-cell", message);
   }
@@ -132,23 +133,25 @@ export class NotebookController extends eventemitter3 {
    * @param cellId The ID of the cell to set.
    */
   public setExecutionId(messageId: string, cellId: string) {
-    const found = this.model.cells.find((m) => m.id === messageId)
-    if(found){
+    const found = this.model.cells.find((m) => m.id === messageId);
+    if (found) {
       found.executionId = cellId;
     }
     this.emit("cellId", { messageId, cellId });
   }
 
   /**
-   * Returns the ordered list of cell id's. 
+   * Returns the ordered list of cell id's.
    * This is also the sequence of message id's since the cell and the message have always the same id.
    * @returns {string[]} Array of cell IDs.
    */
-  public getCellIds(){
+  public getCellIds() {
     return this.model.cells.map((m) => m.id);
   }
-  public getInputCellIds(){
-    return this.model.cells.filter((m) => m.direction === "input").map((m) => m.id);
+  public getInputCellIds() {
+    return this.model.cells
+      .filter((m) => m.direction === "input")
+      .map((m) => m.id);
   }
 
   /**
@@ -156,12 +159,19 @@ export class NotebookController extends eventemitter3 {
    * If an execution id is null it means the cell has not been executed yet.
    * @returns An array of execution IDs.
    */
-  public getExecutionIds(){
+  public getExecutionIds() {
     return this.model.cells.map((m) => m.executionId);
   }
 
-  public getCellById(id: string){
+  public getCellById(id: string) {
     return this.model.getCellById(id);
+  }
+  public get view() {
+    return this._currentView;
+  }
+  public set view(v) {
+    this._currentView = v;
+    this.emit("change-view", v);
   }
   /**
    * Executes a cell by processing the provided message.
@@ -170,10 +180,10 @@ export class NotebookController extends eventemitter3 {
    */
   public async executeCell(message: Message) {
     const ec = ++this.executionCounter;
-    this.setExecutionId(message.id, "In "+ec.toString());
+    this.setExecutionId(message.id, "In " + ec.toString());
 
     this.emit("before-execute", message);
-    
+
     // todo: remove in production
     await new Promise((r) => setTimeout(r, 2000)); // simulate delay
     const p = new FakeInterpreter();

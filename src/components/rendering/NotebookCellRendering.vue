@@ -73,6 +73,7 @@
     </div>
     <div v-else>
       <div style="display: flex">
+       <template v-if="props.controller.view==='default'">
         <div v-if="executionId">
           <div class="w-max min-w-20 my-2 ml-1 text-gray-500">
             [{{ executionId }}]
@@ -81,6 +82,7 @@
         <div v-else>
           <div class="w-max min-w-20 my-2 text-gray-500">[ ]</div>
         </div>
+       </template>
         <div class="cell-output">
           <div v-if="props.cell.message.typeName == 'CodeMessage'">
             <CodeMessageRendering
