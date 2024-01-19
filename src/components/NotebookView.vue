@@ -1,11 +1,39 @@
 <template>
-  <div>
-    <div v-for="cell in cells" :key="cell.executionId">
-      <NotebookCellRendering
-        :cell="cell"
-        :controller="controller"
-        :hasFocus="cell.hasFocus"
-      />
+  <div class="grid grid-cols-4 gap-4">
+    <div
+      v-for="tuple in groupedCells"
+      :key="tuple[0].executionId + tuple[0].hasHighlight + tuple[0].message.id"
+      class="bg-gray-300 dark:bg-[#333] p-2 border-slate-600 border-1 rounded"
+      :class="{
+        'col-span-1': tuple[0].colSpan === 1,
+        'col-span-2': tuple[0].colSpan === 2,
+        'col-span-3': tuple[0].colSpan === 3,
+        'col-span-4': tuple[0].colSpan === 4,
+      }"
+    >
+      <div>
+        <template v-if="tuple.length === 1">
+          <NotebookCellRendering
+            :hasHighlight="tuple[0].hasHighlight"
+            :cell="tuple[0]"
+            :controller="controller"
+            :hasFocus="tuple[0].hasFocus"
+          />
+        </template>
+        <template v-else>
+          <NotebookCellRendering
+            :hasHighlight="tuple[0].hasHighlight"
+            :cell="tuple[0]"
+            :controller="controller"
+            :hasFocus="tuple[0].hasFocus"
+          />
+          <NotebookCellRendering
+            :cell="tuple[1]"
+            :controller="controller"
+            :hasFocus="tuple[1].hasFocus"
+          />
+        </template>
+      </div>
     </div>
   </div>
 </template>
@@ -19,30 +47,56 @@ import { Message, NotebookCell } from "@orbifold/entities";
 const controller: NotebookController = new NotebookController();
 const cells: NotebookCell[] = ref([]);
 
+const groupedCells = ref([]);
+
 /**
  * Re-renders the notebook.
  */
 function refreshAll() {
   cells.value = [];
   cells.value = controller.cells;
+
+  // grouping the cells in tuple with input and output
+  const coll = [];
+  let previous = [];
+  for (let i = 0; i < cells.value.length; i++) {
+    const u = cells.value[i];
+    if (u.direction === "input") {
+      if (previous.length > 0) {
+        coll.push(previous);
+      }
+      previous = [u];
+    } else {
+      previous.push(u);
+      coll.push(previous);
+      previous = [];
+    }
+  }
+  if (previous.length > 0) {
+    coll.push(previous);
+  }
+  groupedCells.value = coll;
 }
 
 onMounted(() => {
   controller.on("new-cell", refreshAll);
-  controller.on("focus", setFocus);
+  // controller.on("focus", setFocus);
   controller.on("delete-cell", refreshAll);
   controller.on("cellId", refreshAll);
+  controller.on("before-execute", beforeExecute);
+  controller.on("after-execute", afterExecute);
 });
 
 /**
- * Adds a cell to the notebook.
+ * Adds a cell to the notebook view.
  */
 function addCell(
   message: Message | null = null,
   cellId: string | null = null,
-  beforeOrAfter: string = "after"
+  beforeOrAfter: string = "after",
+  colSpan: number = 4
 ) {
-  controller.addCell(message, cellId, beforeOrAfter);
+  controller.addCell(message, cellId, beforeOrAfter, colSpan);
 }
 
 function setFocus(cellId) {
@@ -55,14 +109,33 @@ function setFocus(cellId) {
   });
   refreshAll();
 }
+function beforeExecute(message) {
+  controller.getCellById(message.id).hasHighlight = true;
+}
+function afterExecute(message) {
+  controller.getCellById(message.id).hasHighlight = false;
+}
 function setExecutionId(messageId, cellId) {
   controller.setExecutionId(messageId, cellId);
 }
 function getCellIds() {
   return controller.getCellIds();
 }
+function getInputCellIds() {
+  return controller.getInputCellIds();
+}
 function getExecutionIds() {
   return controller.getExecutionIds();
+}
+function executeCell(u: string | Message) {
+  if (u instanceof Message) {
+    controller.executeCell(u);
+  } else {
+    const c = controller.getCellById(u);
+    if (c) {
+      controller.executeCell(c.message);
+    }
+  }
 }
 /**
  * Expose the functions to the outside world.
@@ -72,6 +145,8 @@ defineExpose({
   refreshAll,
   getCellIds,
   getExecutionIds,
-  setExecutionId
+  setExecutionId,
+  executeCell,
+  getInputCellIds,
 });
 </script>

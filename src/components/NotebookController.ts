@@ -7,6 +7,7 @@ import {
   TextMessage,
 } from "@orbifold/entities";
 import { FakeInterpreter } from "../interprete/fake/FakeInterpreter";
+import _ from "lodash";
 /**
  * Represents a (MVC) controller for a notebook.
  * View: NotebookView gets events from the controller and renders the notebook.
@@ -34,18 +35,22 @@ export class NotebookController extends eventemitter3 {
    * @param message - The message to be displayed in the cell. If not provided, a random code message will be generated.
    * @param cellId - The ID of the cell. If not provided, a new ID will be generated.
    * @param beforeOrAfter - Specifies whether the new cell should be added before or after the specified cell. Default is "after".
+   * @param colSpan - The number of columns the cell should span. Default is 4.
    */
   public addCell(
     message: Message | null = null,
     cellId: string | null = null,
-    beforeOrAfter: string = "after"
+    beforeOrAfter: string = "after",
+    colSpan: number = 4
   ) {
     if (message === null) {
       message = new CodeMessage("Some code here " + Math.random());
     }
     const cell = new NotebookCell(this.model, message, "input");
+    cell.colSpan = colSpan;
     this.model.addCell(cell, cellId, beforeOrAfter);
     this.emit("new-cell", cell);
+    return cell;
   }
 
   /**
@@ -142,6 +147,9 @@ export class NotebookController extends eventemitter3 {
   public getCellIds(){
     return this.model.cells.map((m) => m.id);
   }
+  public getInputCellIds(){
+    return this.model.cells.filter((m) => m.direction === "input").map((m) => m.id);
+  }
 
   /**
    * Retrieves the execution IDs of all cells in the notebook.
@@ -152,20 +160,26 @@ export class NotebookController extends eventemitter3 {
     return this.model.cells.map((m) => m.executionId);
   }
 
+  public getCellById(id: string){
+    return this.model.getCellById(id);
+  }
   /**
    * Executes a cell by processing the provided message.
    * - the In/Out prefix is dynamic, you could change this in function of the interpreter
    * @param message The message to be executed.
    */
   public async executeCell(message: Message) {
+    const ec = ++this.executionCounter;
+    this.setExecutionId(message.id, "In "+ec.toString());
+
+    this.emit("before-execute", message);
+    
     // todo: remove in production
-    await new Promise((r) => setTimeout(r, Math.round(Math.random() * 1000))); // simulate delay
-    this.executionCounter++;
-    this.setExecutionId(message.id, "In "+this.executionCounter.toString());
+    await new Promise((r) => setTimeout(r, 2000)); // simulate delay
     const p = new FakeInterpreter();
     const a = await p.execute(message);
     const c = this.addOutputCell(a, message.id);
-    c.executionId = "Out " + this.executionCounter;
-    this.emit("execute-cell", message);
+    c.executionId = "Out " + ec;
+    this.emit("after-execute", message);
   }
 }
