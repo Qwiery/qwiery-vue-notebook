@@ -6,7 +6,7 @@
     <div class="my-2 w-full">
       <template v-if="props.message.renderType === 'data'">
         <vue3-datatable
-        v-if="renderChart"
+          v-if="renderChart"
           :rows="rows"
           :columns="cols"
           :loading="loading"
@@ -17,12 +17,12 @@
       </template>
       <template v-if="props.message.renderType === 'chart'">
         <div class="w-full h-full">
-          <apexchart          
-          v-if="renderChart"
-          type="bar"
-          :options="chartOptions"
-          :series="series"
-        ></apexchart>
+          <apexchart
+            v-if="renderChart"
+            type="bar"
+            :options="chartOptions"
+            :series="series"
+          ></apexchart>
         </div>
       </template>
     </div>
@@ -33,6 +33,7 @@ import { CodeMessage } from "@orbifold/entities";
 import { NotebookController } from "../NotebookController";
 import { onMounted, ref } from "vue";
 import Vue3Datatable from "@bhplugin/vue3-datatable";
+import _ from "lodash";
 import "@bhplugin/vue3-datatable/dist/style.css";
 onMounted(() => {
   getUsers();
@@ -40,7 +41,7 @@ onMounted(() => {
     renderChart.value = true;
   }, 500);
 });
-const renderChart=ref(false);
+const renderChart = ref(false);
 const loading: any = ref(true);
 const rows: any = ref(null);
 const cols =
@@ -64,14 +65,6 @@ const getUsers = async () => {
   loading.value = false;
 };
 
-const chartOptions = {
-  chart: {
-    id: "vuechart-example",
-  },
-  xaxis: {
-    categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998],
-  },
-};
 const series = [
   {
     name: "series-1",
@@ -94,4 +87,16 @@ const props = defineProps({
     default: "input",
   },
 });
+// debugger;
+const d = {
+  chart: {
+    id: "vuechart-example",
+  },
+  xaxis: {
+    categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998],
+  },
+};
+
+const chartOptions = _.merge(props.message.renderOptions,d);  ;
+console.log(JSON.parse(JSON.stringify(chartOptions)));
 </script>

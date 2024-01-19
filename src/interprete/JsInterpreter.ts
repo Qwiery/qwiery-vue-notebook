@@ -15,6 +15,7 @@ export class JsInterpreter {
 
     const Q = {
       renderType: null as string | null, // Update the type of renderType
+      renderOptions:null as any,
       x: 45,
       setData(d) {},
       data() {
@@ -31,7 +32,15 @@ export class JsInterpreter {
     try {
       const out = scopedEval(message.code, { x: 4 });
       if (Q.renderType) {
-        return new DataMessage([], Q.renderType);
+        return new DataMessage([], Q.renderType, {
+          xaxis: {
+            labels: {
+              style: {
+                colors: "red",
+              },
+            },
+          },
+        });
       } else {
         return new CodeMessage(
           out ? out + "\n" + consoleOutput : consoleOutput
