@@ -15,7 +15,7 @@ export class JsInterpreter {
 
     const Q = {
       renderType: null as string | null, // Update the type of renderType
-      renderOptions:null as any,
+      renderOptions: null as any,
       x: 45,
       setData(d) {},
       data() {
