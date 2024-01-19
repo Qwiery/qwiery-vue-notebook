@@ -25,8 +25,8 @@
             <div class="w-full dark:bg-[#666] bg-gray-200 ml-0">
               <div class="grid grid-cols-4">
                 <div class="col-start-5 m-1 flex">
-                  <div class="ml-1 cursor-pointer" @click="bigger()">⬆️</div>
-                  <div class="ml-1 cursor-pointer" @click="smaller()">⬇️</div>
+                  <div class="ml-1 cursor-pointer" @click="bigger()">⏶</div>
+                  <div class="ml-1 cursor-pointer" @click="smaller()">⏷</div>
                   <div class="ml-1 mt-0 cursor-pointer"  @click="deleteCell()">
                     <svg
                     title="Delete cell"
@@ -78,7 +78,7 @@
       </div>
     </div>
     <div v-else>
-      <div style="display: flex">
+      <div >
         <template v-if="props.controller.view === 'default'">
           <div v-if="executionId">
             <div class="w-max min-w-20 my-2 ml-1 text-gray-500">
@@ -108,6 +108,12 @@
               direction="output"
             />
           </div>
+          <div v-if="props.cell.message.typeName == 'DataMessage'">
+            <DataMessageRendering
+              :message="props.cell.message"
+              direction="output"
+            />
+          </div>
         </div>
       </div>
     </div>
@@ -120,6 +126,7 @@ import { NotebookCell } from "@orbifold/entities";
 import CodeMessageRendering from "./CodeMessageRendering.vue";
 import TextMessageRendering from "./TextMessageRendering.vue";
 import MarkdownMessageRendering from "./MarkdownMessageRendering.vue";
+import DataMessageRendering from "./DataMessageRendering.vue";
 import { NotebookController } from "../NotebookController";
 // const hasFocus = computed(() => {
 //   return props.cell.hasFocus;

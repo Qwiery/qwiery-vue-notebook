@@ -113,7 +113,7 @@ function addCell(
   beforeOrAfter: string = "after",
   colSpan: number = 4
 ) {
-  controller.addCell(message, cellId, beforeOrAfter, colSpan);
+  return controller.addCell(message, cellId, beforeOrAfter, colSpan);
 }
 function changeView(view: string) {
   currentView.value = view;

@@ -55,7 +55,9 @@ function createStuff() {
   //   const cellId = _.sample(notebook.getInputCellIds());
   //   notebook.executeCell(cellId);
   // }, 1000 + Math.random() * 2000);
-  notebook.addCell(new CodeMessage("console.log('aasdfa')"));
-  notebook.addCell(new CodeMessage("console.log(Math.random())"));
+  const a=notebook.addCell(new CodeMessage("Q.data()"));
+  const b = notebook.addCell(new CodeMessage("Q.chart()"));
+  notebook.executeCell(a.id);
+  notebook.executeCell(b.id);
 }
 </script>

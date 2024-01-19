@@ -1,4 +1,4 @@
-import { CodeMessage, Message } from "@orbifold/entities";
+import { CodeMessage, Message, DataMessage } from "@orbifold/entities";
 
 export class JsInterpreter {
   public async execute(message: Message) {
@@ -12,17 +12,31 @@ export class JsInterpreter {
     console.log = function (value) {
       consoleOutput += value + "\n";
     };
-    window.Q = { x: 45,
-        setData(d){
 
-        }
+    const Q = {
+      renderType: null as string | null, // Update the type of renderType
+      x: 45,
+      setData(d) {},
+      data() {
+        Q.renderType = "data";
+      },
+      chart() {
+        Q.renderType = "chart";
+      },
     };
+    window.Q = Q;
     const scopedEval = (script, scope) =>
       Function(`"use strict"; ${script}`).bind(scope)();
 
     try {
       const out = scopedEval(message.code, { x: 4 });
-      return new CodeMessage(out ? out + "\n" + consoleOutput : consoleOutput);
+      if (Q.renderType) {
+        return new DataMessage([], Q.renderType);
+      } else {
+        return new CodeMessage(
+          out ? out + "\n" + consoleOutput : consoleOutput
+        );
+      }
     } catch (e) {
       return new CodeMessage(consoleOutput + e);
     }
