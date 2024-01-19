@@ -9,14 +9,18 @@
 </template>
 <script setup lang="ts">
 // import Notebook from "@/components/Notebook.vue";
+import { Message } from "@orbifold/entities";
 import { onMounted, ref } from "vue";
-// import { Notebook } from "@orbifold/entities";
 const nb = ref(null);
 let notebook: any | null = null;
 onMounted(() => {
   notebook = nb.value;
+  window["nb"] = notebook;
 });
-function addCell() {
+
+function addCell( message: Message | null = null,
+    cellId: string | null = null,
+    beforeOrAfter: string = "after") {
   if (notebook) {
     notebook.addCell();
   }

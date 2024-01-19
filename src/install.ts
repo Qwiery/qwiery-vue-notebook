@@ -1,10 +1,10 @@
 import type { App } from "vue";
-import Notebook from "./components/Notebook.vue";
+import NotebookView from "./components/NotebookView.vue";
 
 export default {
   install: (app: App) => {
-    app.component("Notebook", Notebook);
+    app.component("Notebook", NotebookView);
   },
 };
 
-export { Notebook };
+export { NotebookView };

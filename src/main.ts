@@ -1,6 +1,6 @@
 import { createApp } from 'vue'
 import App from './App.vue'
-import Terminal from './install'
+import Notebooks from './install'
 const app = createApp(App)
-app.use(Terminal)
+app.use(Notebooks)
 app.mount('#app')

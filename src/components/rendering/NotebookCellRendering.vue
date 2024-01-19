@@ -6,8 +6,8 @@
   >
  
     <div class="flex">
-      <div v-if="cellId">
-        <div class="my-2 text-gray-500 w-max min-w-20">[In {{ cellId }}]</div>
+      <div v-if="executionId">
+        <div class="my-2 text-gray-500 w-max min-w-20">[{{ executionId }}]</div>
       </div>
       <div v-else>
         <div class="my-2 text-gray-500 w-max min-w-20">[ ]</div>
@@ -71,9 +71,9 @@
   </div>
   <div v-else>
     <div style="display: flex">
-      <div v-if="cellId">
+      <div v-if="executionId">
         <div class="w-max min-w-20 my-2 text-gray-500">
-          [Out {{ cellId }}]
+          [{{ executionId }}]
         </div>
       </div>
       <div v-else>
@@ -122,15 +122,14 @@ const props = defineProps({
     required: false,
   },
 });
-const cellId = computed(() => {
-  console.log(">>", props.cell.cellId);  
-  return props.cell.cellId;
+const executionId = computed(() => {
+  return props.cell.executionId;
 });
-// const {cellId} = toRefs(props.cell);
+// const {executionId} = toRefs(props.cell);
 // watch(
 //     ()=>props.cell,
 //     (newVal) => {
-//       cellId.value = newVal.cellId||"";
+//       executionId.value = newVal.executionId||"";
 //     },
 //     { immediate: true, deep: true }
 //   );
