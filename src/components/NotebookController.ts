@@ -6,7 +6,8 @@ import {
   NotebookCell,
   TextMessage,
 } from "@orbifold/entities";
-import { FakeInterpreter } from "../interprete/fake/FakeInterpreter";
+import { FakeInterpreter } from "../interprete/FakeInterpreter";
+import { JsInterpreter } from "../interprete/JsInterpreter";
 import _ from "lodash";
 /**
  * Represents a (MVC) controller for a notebook.
@@ -14,6 +15,13 @@ import _ from "lodash";
  * Model: Notebook (sits in @orbifold/entities) is the model of the notebook.
  */
 export class NotebookController extends eventemitter3 {
+  setColSpan(id: string, colSpan: any) {
+    const cell = this.model.getCellById(id);
+    if (cell) {
+      cell.colSpan = Math.max(1, Math.min(4, colSpan));
+      // this.emit("update-cell", cell.message);
+    }
+  }
   public model: Notebook = new Notebook();
   /**
    * The counter for tracking the number of executions.
@@ -173,7 +181,7 @@ export class NotebookController extends eventemitter3 {
     this._currentView = v;
     this.emit("change-view", v);
   }
-  public  getMessages(){
+  public getMessages() {
     return this.model.cells.map((m) => m.message);
   }
   /**
@@ -189,7 +197,7 @@ export class NotebookController extends eventemitter3 {
 
     // todo: remove in production
     // await new Promise((r) => setTimeout(r, 2000)); // simulate delay
-    const p = new FakeInterpreter();
+    const p = new JsInterpreter();
     const a = await p.execute(message);
     const c = this.addOutputCell(a, message.id);
     c.executionId = "Out " + ec;

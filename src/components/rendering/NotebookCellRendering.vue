@@ -15,7 +15,7 @@
           <div class="my-2 text-gray-500 w-max min-w-20">[ ]</div>
         </div>
         <div
-          class="border-l-4 w-full  dark:bg-[#333] bg-gray-100"
+          class="border-l-4 w-full dark:bg-[#333] bg-gray-100"
           :class="{
             'border-l-gray-500': !props.hasFocus,
             'border-l-green-500': props.hasFocus,
@@ -24,16 +24,15 @@
           <div class="flex" v-if="hasFocus">
             <div class="w-full dark:bg-[#666] bg-gray-200 ml-0">
               <div class="grid grid-cols-4">
-                <div class="ml-3">Image</div>
-                <div class="ml-3">Ad</div>
-                <div class="col-start-5 m-1">
-                  <svg
-                    @click="deleteCell()"
-                    style="cursor: pointer"
+                <div class="col-start-5 m-1 flex">
+                  <div class="ml-1 cursor-pointer" @click="bigger()">⬆️</div>
+                  <div class="ml-1 cursor-pointer" @click="smaller()">⬇️</div>
+                  <div class="ml-1 mt-0 cursor-pointer"  @click="deleteCell()">
+                    <svg
                     title="Delete cell"
                     fill="#000000"
-                    width="12px"
-                    height="12px"
+                    width="16px"
+                    height="16px"
                     viewBox="-2.94 0 31.716 31.716"
                     xmlns="http://www.w3.org/2000/svg"
                   >
@@ -57,6 +56,8 @@
                       </g>
                     </g>
                   </svg>
+                </div>
+                 
                 </div>
               </div>
             </div>
@@ -164,5 +165,11 @@ function setFocus() {
 
 function deleteCell() {
   props.controller.deleteCell(props.cell.message.id);
+}
+function bigger() {
+  props.controller.setColSpan(props.cell.message.id, props.cell.colSpan + 1);
+}
+function smaller() {
+  props.controller.setColSpan(props.cell.message.id, props.cell.colSpan - 1);
 }
 </script>

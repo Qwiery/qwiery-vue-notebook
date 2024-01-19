@@ -15,7 +15,7 @@
 </template>
 <script setup lang="ts">
 // import Notebook from "@/components/Notebook.vue";
-import { Message,MarkdownMessage } from "@orbifold/entities";
+import { Message, MarkdownMessage, CodeMessage } from "@orbifold/entities";
 import { onMounted, ref } from "vue";
 import _ from "lodash";
 import MarkdownMessageRendering from "./components/rendering/MarkdownMessageRendering.vue";
@@ -29,7 +29,12 @@ onMounted(() => {
 
 function addCell() {
   if (notebook) {
-    notebook.addCell(new MarkdownMessage("# Aah"), null, "after", _.sample([1, 2, 3, 4]));
+    notebook.addCell(
+      new MarkdownMessage("# Aah"),
+      null,
+      "after",
+      _.sample([1, 2, 3, 4])
+    );
   }
 }
 function toggleTheme() {
@@ -37,7 +42,9 @@ function toggleTheme() {
 }
 function toggleView() {
   if (notebook) {
-    notebook.setView(notebook.getView() === "default" ? "dashboard" : "default");
+    notebook.setView(
+      notebook.getView() === "default" ? "dashboard" : "default"
+    );
   }
 }
 function createStuff() {
@@ -48,5 +55,7 @@ function createStuff() {
   //   const cellId = _.sample(notebook.getInputCellIds());
   //   notebook.executeCell(cellId);
   // }, 1000 + Math.random() * 2000);
+  notebook.addCell(new CodeMessage("console.log('aasdfa')"));
+  notebook.addCell(new CodeMessage("console.log(Math.random())"));
 }
 </script>
