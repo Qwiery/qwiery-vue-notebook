@@ -1,5 +1,6 @@
 import type { App } from "vue";
-import NotebookView from "./components/NotebookView.vue";
+// @ts-ignore
+import NotebookView from "/src/components/NotebookView.vue";
 import VueApexCharts from "vue3-apexcharts";
 export default {
   install: (app: App) => {

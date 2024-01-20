@@ -30,7 +30,7 @@
 </template>
 <script setup lang="ts">
 import { CodeMessage } from "@orbifold/entities";
-import { NotebookController } from "../NotebookController";
+import { NotebookController } from "~/components/NotebookController";
 import { onMounted, ref } from "vue";
 import Vue3Datatable from "@bhplugin/vue3-datatable";
 import _ from "lodash";
@@ -71,6 +71,14 @@ const series = [
     data: [30, 40, 35, 50, 49, 60, 70, 91],
   },
 ];
+const chartOptions = {
+  chart: {
+    id: "vuechart-example",
+  },
+  xaxis: {
+    categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998],
+  },
+};
 
 const props = defineProps({
   message: {
@@ -88,15 +96,5 @@ const props = defineProps({
   },
 });
 // debugger;
-const d = {
-  chart: {
-    id: "vuechart-example",
-  },
-  xaxis: {
-    categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998],
-  },
-};
 
-const chartOptions = _.merge(props.message.renderOptions,d);  ;
-console.log(JSON.parse(JSON.stringify(chartOptions)));
 </script>

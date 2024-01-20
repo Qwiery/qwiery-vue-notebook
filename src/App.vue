@@ -14,11 +14,9 @@
   </div>
 </template>
 <script setup lang="ts">
-// import Notebook from "@/components/Notebook.vue";
 import { Message, MarkdownMessage, CodeMessage } from "@orbifold/entities";
 import { onMounted, ref } from "vue";
 import _ from "lodash";
-import MarkdownMessageRendering from "./components/rendering/MarkdownMessageRendering.vue";
 const nb = ref(null);
 let notebook: any | null = null;
 onMounted(() => {

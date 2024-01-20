@@ -1,25 +1,25 @@
 {
-  "name": "@orbifold/vue-terminal",
+  "name": "@orbifold/notebook",
   "author": {
     "email": "info@orbifold.net",
     "name": "Orbifold Consulting (Francois Vanderseypen)",
     "url": "https://orbifold.net"
   },
-  "description": "A Vue/Nuxt v3 terminal component.",
+  "description": "A Vue/Nuxt v3 literate programming component.",
   "homepage": "https://qwiery.com",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Qwiery/qwiery-vue-terminal.git"
+    "url": "git+https://github.com/Qwiery/qwiery-vue-notebook.git"
   },
   "bugs": {
-    "url": "https://github.com/Qwiery/qwiery-vue-terminal/issues",
+    "url": "https://github.com/Qwiery/qwiery-vue-notebook/issues",
     "email": "info@orbifold.net"
   },
   "engines": {
     "node": ">=21"
   },
   "private": false,
-  "version": "1.0.3",
+  "version": "1.0.4",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
@@ -31,6 +31,7 @@
     "dev": "vite",
     "test": "vitest run",
     "build": "vite build",
+    "build:watch": "vite build --watch",
     "preview": "vite preview"
   },
   "dependencies": {

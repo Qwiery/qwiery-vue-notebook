@@ -1,6 +1,52 @@
-# Vue Notebook Component
+# Vue/Nuxt Literate Programming Component
 
-Install with `npm install @orbifold/vue-notebook --save`
+![](./Screenshot.png)
+This is a Vue/Nuxt component to render literate programming notebooks. It's part of the [Qwiery](https://qwiery.com) framework but you can use it independently.
+
+To set it up you need a Vue/Nuxt app and add the following dependencies:
+
+```text
+    "@orbifold/vue-notebook":"latest",
+    "@orbifold/utils": "latest",
+    "@orbifold/entities": "latest",
+    "@orbifold/notebook": "latest",
+    "vue3-apexcharts": "^1.4.4",
+    "@bhplugin/vue3-datatable": "^1.1.3"
+```
+
+You also need to [set up Tailwind separately](https://tailwindcss.com/docs/guides/vite#vue). 
+ 
+With this in place you can use the component as follows:
+
+```vue
+<template>
+  <div class="bg-blue-700 text-white text-xl">Notebook Integration</div>
+  <div class="border-2 border-gray-200 p-4 m-4 w-5/12 justify-center mx-auto">
+    <Notebook ref="nbv" class=""></Notebook>
+  </div>
+</template>
+<script setup lang="ts">
+  import "@orbifold/notebook/dist/style.css"
+  import {onMounted, ref} from "vue";
+
+  const nbv = ref(null);
+  let nb;
+
+  onMounted(() => {
+    nb = nbv.value;
+    nb.addCell();
+
+  });
+</script>
+```
+
+Note in particular that you need to import the CSS file. 
+
+If you clone the notebook repo you can also run a demo app (screenshot above) with the usual:
+
+```bash
+npm run dev
+```
 
 ## Feedback
 

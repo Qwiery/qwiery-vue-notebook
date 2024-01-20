@@ -10,11 +10,11 @@
     <div class="my-2 w-full">
       <pre class="text-gray-700 dark:text-gray-500">{{ props.message.code }}</pre>
     </div>
-  </div>  
+  </div>
 </template>
 <script setup lang="ts">
 import { CodeMessage } from "@orbifold/entities";
-import { NotebookController } from "../NotebookController";
+import { NotebookController } from "~/components/NotebookController";
 function keyup(event: KeyboardEvent) {
   props.message.code = (<HTMLTextAreaElement>event.target).value;
 }

@@ -9,14 +9,29 @@ export default defineConfig({
         dts({
             rollupTypes: true,
             entryRoot: "src",
-            tsconfigPath: path.join(__dirname, "tsconfig.json"),
+            tsconfigPath: path.join(__dirname, "tsconfig.json")
         })
     ],
+    resolve: {
+        alias: [
+            {
+                find: "~",
+                replacement: path.resolve(__dirname, "./src")
+            }
+        ]
+    },
     build: {
+        minify: false,
         rollupOptions: {
-            external: [               
-                "@orbifold/utils",
-                "lodash"
+            external: [
+                "@vue/composition-api",
+                "vue",
+                "tailwindcss",
+                "postcss",
+                "autoprefixer",
+                "vue3-apexcharts",
+                "@bhplugin/vue3-datatable"
+
             ]
         },
         lib: {

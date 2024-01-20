@@ -11,7 +11,7 @@
 </template>
 <script setup lang="ts">
 import { TextMessage } from "@orbifold/entities";
-import { NotebookController } from "../NotebookController";
+import { NotebookController } from "~/components/NotebookController";
 
 function keydown(event: KeyboardEvent) {
   if (event.key === "a" && event.ctrlKey) {

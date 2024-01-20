@@ -1,4 +1,5 @@
 import { createApp } from 'vue'
+// @ts-ignore
 import App from './App.vue'
 import Notebooks from './install'
 

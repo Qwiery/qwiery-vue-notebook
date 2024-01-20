@@ -1,7 +1,7 @@
 @import "tailwindcss/base";
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
- 
+
 body{
         @apply text-sm
  }
@@ -24,3 +24,4 @@ body{
  p{
         @apply text-gray-700 dark:text-gray-400
  }
+

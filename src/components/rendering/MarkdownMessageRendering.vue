@@ -13,7 +13,7 @@
 </template>
 <script setup lang="ts">
 import { MarkdownMessage } from "@orbifold/entities";
-import { NotebookController } from "../NotebookController";
+import { NotebookController } from "~/components/NotebookController";
 import { watch, ref } from "vue";
 import MarkdownIt from "markdown-it";
 

@@ -1,10 +1,10 @@
 <template>
   <div class="grid grid-cols-4 gap-4">
-    <div
-      v-for="tuple in groupedCells"
-      :key="tuple[0].executionId + tuple[0].hasHighlight + tuple[0].message.id"
-      class="rounded p-2 "
-      :class="{
+    <div v-if="show"
+         v-for="tuple in groupedCells"
+         :key="tuple[0].executionId + tuple[0].hasHighlight + tuple[0].message.id"
+         class="rounded p-2 "
+         :class="{
         'border-2':currentView === 'default',
         'shadow-md':currentView === 'default',
         'hidden': tuple.length === 1 && currentView === 'dashboard',
@@ -14,36 +14,37 @@
         'col-span-4': tuple[0].colSpan === 4,
       }"
     >
+      <div>Works</div>
       <div>
         <template v-if="currentView === 'default'">
           <template v-if="tuple.length === 1">
             <NotebookCellRendering
-              :hasHighlight="tuple[0].hasHighlight"
-              :cell="tuple[0]"
-              :controller="controller"
-              :hasFocus="tuple[0].hasFocus"
+                :hasHighlight="tuple[0].hasHighlight"
+                :cell="tuple[0]"
+                :controller="controller"
+                :hasFocus="tuple[0].hasFocus"
             />
           </template>
           <template v-else>
             <NotebookCellRendering
-              :hasHighlight="tuple[0].hasHighlight"
-              :cell="tuple[0]"
-              :controller="controller"
-              :hasFocus="tuple[0].hasFocus"
+                :hasHighlight="tuple[0].hasHighlight"
+                :cell="tuple[0]"
+                :controller="controller"
+                :hasFocus="tuple[0].hasFocus"
             />
             <NotebookCellRendering
-              :cell="tuple[1]"
-              :controller="controller"
-              :hasFocus="tuple[1].hasFocus"
+                :cell="tuple[1]"
+                :controller="controller"
+                :hasFocus="tuple[1].hasFocus"
             />
           </template>
         </template>
         <template v-if="currentView === 'dashboard'">
           <template v-if="tuple.length === 2">
             <NotebookCellRendering
-              :cell="tuple[1]"
-              :controller="controller"
-              :hasFocus="tuple[1].hasFocus"
+                :cell="tuple[1]"
+                :controller="controller"
+                :hasFocus="tuple[1].hasFocus"
             />
           </template>
         </template>
@@ -52,15 +53,16 @@
   </div>
 </template>
 <script setup lang="ts">
-import { computed, onMounted, ref, watch } from "vue";
-import { NotebookController } from "./NotebookController";
-import NotebookCellRendering from "./rendering/NotebookCellRendering.vue";
-import "../assets/style.css";
-import { Message, NotebookCell } from "@orbifold/entities";
+
+import {computed, onMounted, ref, watch} from "vue";
+import {NotebookController} from "~/components/NotebookController";
+import NotebookCellRendering from "~/components/rendering/NotebookCellRendering.vue";
+import "~/assets/style.css";
+import {Message, NotebookCell} from "@orbifold/entities";
 // MVC logic
 const controller: NotebookController = new NotebookController();
 const cells: NotebookCell[] = ref([]);
-
+const show=ref(false);
 const groupedCells = ref([]);
 const currentView = ref("default");
 
@@ -68,6 +70,8 @@ const currentView = ref("default");
  * Re-renders the notebook.
  */
 function refreshAll() {
+  show.value = false;
+
   cells.value = [];
   cells.value = controller.cells;
 
@@ -90,7 +94,10 @@ function refreshAll() {
   if (previous.length > 0) {
     coll.push(previous);
   }
+
+  show.value = true;
   groupedCells.value = coll;
+
 }
 
 onMounted(() => {
@@ -103,23 +110,26 @@ onMounted(() => {
   controller.on("change-view", changeView);
 });
 
-function getMessages(){
+function getMessages() {
   return controller.getMessages();
 }
+
 /**
  * Adds a cell to the notebook view.
  */
 function addCell(
-  message: Message | null = null,
-  cellId: string | null = null,
-  beforeOrAfter: string = "after",
-  colSpan: number = 4
+    message: Message | null = null,
+    cellId: string | null = null,
+    beforeOrAfter: string = "after",
+    colSpan: number = 4
 ) {
   return controller.addCell(message, cellId, beforeOrAfter, colSpan);
 }
+
 function changeView(view: string) {
   currentView.value = view;
 }
+
 function setFocus(cellId) {
   controller.cells.forEach((cell) => {
     if (cell.message.id === cellId) {
@@ -130,24 +140,31 @@ function setFocus(cellId) {
   });
   refreshAll();
 }
+
 function beforeExecute(message) {
   controller.getCellById(message.id).hasHighlight = true;
 }
+
 function afterExecute(message) {
   controller.getCellById(message.id).hasHighlight = false;
 }
+
 function setExecutionId(messageId, cellId) {
   controller.setExecutionId(messageId, cellId);
 }
+
 function getCellIds() {
   return controller.getCellIds();
 }
+
 function getInputCellIds() {
   return controller.getInputCellIds();
 }
+
 function getExecutionIds() {
   return controller.getExecutionIds();
 }
+
 function executeCell(u: string | Message) {
   if (u instanceof Message) {
     controller.executeCell(u);
@@ -158,13 +175,16 @@ function executeCell(u: string | Message) {
     }
   }
 }
+
 function setView(view: string = "default") {
   if (!view) return;
   controller.view = view;
 }
+
 function getView() {
   return controller.view;
 }
+
 /**
  * Expose the functions to the outside world.
  */
@@ -188,3 +208,4 @@ defineExpose({
 //   },
 // });
 </script>
+

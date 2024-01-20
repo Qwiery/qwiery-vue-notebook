@@ -43,7 +43,7 @@
                         </g>
                       </svg>
                                     </div>
-    
+
                                 </div>
                             </div>
                         </div>
@@ -103,11 +103,11 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, watch, toRef } from "vue";
 import { NotebookCell } from "@orbifold/entities";
-import CodeMessageRendering from "./CodeMessageRendering.vue";
-import TextMessageRendering from "./TextMessageRendering.vue";
-import MarkdownMessageRendering from "./MarkdownMessageRendering.vue";
-import DataMessageRendering from "./DataMessageRendering.vue";
-import { NotebookController } from "../NotebookController";
+import CodeMessageRendering from "~/components/rendering/CodeMessageRendering.vue";
+import TextMessageRendering from "~/components/rendering/TextMessageRendering.vue";
+import MarkdownMessageRendering from "~/components/rendering/MarkdownMessageRendering.vue";
+import DataMessageRendering from "~/components/rendering/DataMessageRendering.vue";
+import { NotebookController } from "~/components/NotebookController";
 // const hasFocus = computed(() => {
 //   return props.cell.hasFocus;
 // })

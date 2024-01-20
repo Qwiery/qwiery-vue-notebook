@@ -25,7 +25,7 @@ export class JsInterpreter {
         Q.renderType = "chart";
       },
     };
-    window.Q = Q;
+    window["Q"] = Q;
     const scopedEval = (script, scope) =>
       Function(`"use strict"; ${script}`).bind(scope)();
 

@@ -6,8 +6,7 @@ import {
   NotebookCell,
   TextMessage,
 } from "@orbifold/entities";
-import { FakeInterpreter } from "../interprete/FakeInterpreter";
-import { JsInterpreter } from "../interprete/JsInterpreter";
+import { JsInterpreter } from "~/interprete/JsInterpreter";
 import _ from "lodash";
 /**
  * Represents a (MVC) controller for a notebook.
