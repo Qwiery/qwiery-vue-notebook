@@ -30,7 +30,8 @@ export default defineConfig({
                 "postcss",
                 "autoprefixer",
                 "vue3-apexcharts",
-                "@bhplugin/vue3-datatable"
+                "@bhplugin/vue3-datatable",
+                "@orbifold/utils"
 
             ]
         },
