@@ -1,4 +1,4 @@
-import { CodeMessage, Message, DataMessage } from "@orbifold/entities";
+import { CodeMessage, Message, DataMessage, ErrorMessage } from "@orbifold/entities";
 import _ from "lodash";
 
 export class JsInterpreter {
@@ -69,7 +69,7 @@ export class JsInterpreter {
 				);
 			}
 		} catch (e) {
-			return new CodeMessage(consoleOutput + e);
+			return new ErrorMessage(consoleOutput + e);
 		}
 	}
 }

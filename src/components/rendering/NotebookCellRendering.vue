@@ -118,6 +118,12 @@
 							direction="output"
 						/>
 					</div>
+					<div v-if="props.cell.message.typeName == 'ErrorMessage'">
+						<ErrorMessageRendering
+							:message="props.cell.message"
+							direction="output"
+						/>
+					</div>
 					<div v-if="props.cell.message.typeName == 'TextMessage'">
 						<TextMessageRendering
 							:message="props.cell.message"
@@ -148,6 +154,7 @@
 	import { NotebookCell } from "@orbifold/entities";
 	import CodeMessageRendering from "~/components/rendering/CodeMessageRendering.vue";
 	import TextMessageRendering from "~/components/rendering/TextMessageRendering.vue";
+	import ErrorMessageRendering from "~/components/rendering/ErrorMessageRendering.vue";
 	import MarkdownMessageRendering from "~/components/rendering/MarkdownMessageRendering.vue";
 	import DataMessageRendering from "~/components/rendering/DataMessageRendering.vue";
 	import { NotebookController } from "~/components/NotebookController";

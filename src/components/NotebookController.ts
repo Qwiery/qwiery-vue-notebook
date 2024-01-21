@@ -1,12 +1,14 @@
 import eventemitter3 from "eventemitter3";
+import { Utils } from "@orbifold/utils";
 import {
 	Message,
 	Notebook,
 	CodeMessage,
 	NotebookCell,
 	TextMessage,
+	ErrorMessage,
 } from "@orbifold/entities";
-import { JsInterpreter } from "~/interprete/JsInterpreter";
+import { JsInterpreter } from "./JsInterpreter";
 import _ from "lodash";
 
 /**
@@ -15,6 +17,26 @@ import _ from "lodash";
  * Model: Notebook (sits in @orbifold/entities) is the model of the notebook.
  */
 export class NotebookController extends eventemitter3 {
+	public jsInterpreter = new JsInterpreter();
+
+	public interpreters: { [key: string]: (m: Message) => Promise<Message> } = {
+		"markdown": async (m: Message) => {
+			// the message is rendered as-is
+			return m;
+		},
+		"javascript": async (m: Message) => {
+			if (m.typeName !== "CodeMessage") {
+				return ErrorMessage.fromString("Interpreter for CodeMessage can only handle CodeMessage");
+			}
+			const programmingLanguage = (<CodeMessage>m).language.toString().trim();
+			if (_.includes(["js", "javascript"], programmingLanguage)) {
+				return this.jsInterpreter.execute(m);
+			} else {
+				return ErrorMessage.fromString("There is no interpreter defined for language " + (<CodeMessage>m).language + ".");
+			}
+		},
+	};
+
 	setColSpan(id: string, colSpan: any) {
 		const cell = this.model.getCellById(id);
 		if (cell) {
@@ -197,16 +219,39 @@ export class NotebookController extends eventemitter3 {
 	 * @param message The message to be executed.
 	 */
 	public async executeCell(message: Message) {
+
 		const ec = ++this.executionCounter;
 		this.setExecutionId(message.id, "In " + ec.toString());
-
 		this.emit("before-execute", message);
+		let outMessage: Message | null = null;
 
-		// todo: remove in production
-		// await new Promise((r) => setTimeout(r, 2000)); // simulate delay
-		const p = new JsInterpreter();
-		const a = await p.execute(message);
-		const c = this.addOutputCell(a, message.id);
+		try {
+			switch (message.typeName) {
+				case "CodeMessage":
+					let language = (<CodeMessage>message).language.toString().trim();
+					if (Utils.isEmpty(language)) {
+						outMessage = ErrorMessage.fromString(`The notebook cell (of type CodeMessage) has no language defined.`);
+					}
+					else{
+						language = this.toCommonLanguageName(language);
+						if (Utils.isEmpty(language)) {
+							outMessage = ErrorMessage.fromString(`No interpreter defined for language '${(<CodeMessage>message).language}'.`);
+						} else {
+							outMessage = await this.interpreters[language](message);
+						}
+					}
+					break;
+				case "MarkdownMessage":
+					outMessage = await this.interpreters["markdown"](message);
+					break;
+				default:
+					outMessage = ErrorMessage.fromString(`Message type '${message.typeName}' execution is not handled yet.`);
+			}
+		} catch (e: any) {
+			console.error(e);
+			outMessage = ErrorMessage.fromString(e.toString());
+		}
+		const c = this.addOutputCell(outMessage, message.id);
 		c.executionId = "Out " + ec;
 		this.emit("after-execute", message);
 	}
@@ -221,6 +266,26 @@ export class NotebookController extends eventemitter3 {
 	public clearAllOutput() {
 		this.model.deleteAllOutput();
 		this.emit("refresh");
+	}
+
+	public toCommonLanguageName(language: string): string {
+		if (Utils.isEmpty(language)) {
+			throw new Error("Language for interpreter assignment cannot be empty");
+		}
+		language = language.toString().trim().toLowerCase();
+		if (Utils.isEmpty(language)) {
+			throw new Error("Language for interpreter assignment cannot be empty");
+		}
+		if (_.includes(["python", "py"], language)) {
+			return "python";
+		}
+		if (_.includes(["javascript", "js"], language)) {
+			return "javascript";
+		}
+		if (_.includes(["markdown", "md"], language)) {
+			return "markdown";
+		}
+		return language;
 	}
 
 }

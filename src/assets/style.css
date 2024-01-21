@@ -27,3 +27,6 @@ body{
 .grid-container {
     @apply grid grid-cols-4 gap-4 !important;
 }
+ul{
+    @apply list-disc list-inside
+}
