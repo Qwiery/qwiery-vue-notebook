@@ -42,7 +42,8 @@
     "lodash": "^4.17.21",
     "markdown-it": "14.0.0",
     "vue": "^3.3.11",
-    "vue3-apexcharts": "^1.4.4"
+    "vue3-apexcharts": "^1.4.4",
+    "@headlessui/vue": "^1.7.16"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^4.5.2",

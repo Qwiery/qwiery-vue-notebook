@@ -11,6 +11,7 @@ To set it up you need a Vue/Nuxt app and add the following dependencies:
     "@orbifold/entities": "latest",
     "@orbifold/notebook": "latest",
     "vue3-apexcharts": "^1.4.4",
+    "@headlessui/vue": "^1.7.16",
     "@bhplugin/vue3-datatable": "^1.1.3"
 ```
 
