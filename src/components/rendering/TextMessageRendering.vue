@@ -2,7 +2,7 @@
   <input v-if="props.direction === 'input'"
     type="text"
     :value="props.message.text"
-    class="input-text"
+    class="input-text text-gray-800 dark:text-gray-400"
     @keydown="keydown($event)"
   />
   <div v-else>

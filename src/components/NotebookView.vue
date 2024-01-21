@@ -3,7 +3,7 @@
     <div v-if="show"
          v-for="tuple in groupedCells"
          :key="tuple[0].executionId + tuple[0].hasHighlight + tuple[0].message.id"
-         class="rounded p-2 "
+         class="rounded p-2 border-gray-500/30"
          :class="{
         'border':currentView === 'default',
         'hidden': tuple.length === 1 && currentView === 'dashboard',
@@ -107,6 +107,7 @@ onMounted(() => {
   controller.on("before-execute", beforeExecute);
   controller.on("after-execute", afterExecute);
   controller.on("change-view", changeView);
+  controller.on("refresh", refreshAll);
 });
 
 function getMessages() {
@@ -183,7 +184,12 @@ function setView(view: string = "default") {
 function getView() {
   return controller.view;
 }
-
+function executeAll(){
+	  controller.executeAll();
+}
+function clearAllOutput(){
+	controller.clearAllOutput();
+}
 /**
  * Expose the functions to the outside world.
  */
@@ -197,7 +203,9 @@ defineExpose({
   getInputCellIds,
   setView,
   getView,
-  getMessages
+  getMessages,
+	executeAll,
+	clearAllOutput
 });
 // const props = defineProps({
 //   view: {

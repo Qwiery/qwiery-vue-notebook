@@ -2,7 +2,7 @@
   <textarea
     v-if="props.direction === 'input'"
     :value="props.message.text"
-    class="input-text p-3 bg-transparent w-full h-full outline-none min-h-40"
+    class="input-text p-3 bg-transparent w-full h-full outline-none min-h-40 text-gray-800 dark:text-gray-400"
     @keydown="keydown($event)"
     @keyup="keyup($event)">
   </textarea>
