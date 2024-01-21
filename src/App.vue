@@ -54,15 +54,7 @@ function createStuff() {
   //   notebook.executeCell(cellId);
   // }, 1000 + Math.random() * 2000);
   const a=notebook.addCell(new CodeMessage("Q.data()"));
-  const b = notebook.addCell(new CodeMessage(`Q.chart(_.range(23).map(i=>_.random(100)), {
-          xaxis: {
-            labels: {
-              style: {
-                colors: "red",
-              },
-            },
-          },
-        })`));
+  const b = notebook.addCell(new CodeMessage(`Q.line(_.range(23).map(i=>_.random(100)))`));
   notebook.executeCell(a.id);
   notebook.executeCell(b.id);
 }

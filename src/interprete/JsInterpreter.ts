@@ -25,10 +25,32 @@ export class JsInterpreter {
 			data(d) {
 				Q.renderType = "data";
 			},
-			chart(chartSeries: any[] = [], renderOptions = {}) {
-				Q.renderType = "chart";
+			bar(chartSeries: any[] = [], renderOptions = {}) {
+				Q.renderType = "bar";
 				Q.chartSeries = chartSeries;
 				Q.renderOptions = renderOptions;
+			},
+			chart(chartSeries: any[] = [], renderOptions = {}) {
+				Q.bar(chartSeries, renderOptions);
+			},
+			barChart(chartSeries: any[] = [], renderOptions = {}) {
+				Q.bar(chartSeries, renderOptions);
+			},
+			lineChart(chartSeries: any[] = [], renderOptions = {}) {
+				Q.line(chartSeries, renderOptions);
+			},
+			line(chartSeries: any[] = [], renderOptions = {}) {
+				Q.renderType = "line";
+				Q.chartSeries = chartSeries;
+				Q.renderOptions = renderOptions;
+			},
+			area(chartSeries: any[] = [], renderOptions = {}) {
+				Q.renderType = "area";
+				Q.chartSeries = chartSeries;
+				Q.renderOptions = renderOptions;
+			},
+			areaChart(chartSeries: any[] = [], renderOptions = {}) {
+				Q.area(chartSeries, renderOptions);
 			},
 		};
 		window["Q"] = Q;
