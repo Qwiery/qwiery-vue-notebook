@@ -7,7 +7,7 @@
 
   <div class="flex justify-center items-center w-screen h-screen">
     <div
-      class="border-2 border-gray-200 dark:border-[#333] rounded w-11/12 h-5/6 md:w-9/12 md:h-5/6 overflow-y-auto p-3"
+      class="  dark:border-[#333] rounded w-11/12 h-5/6 md:w-9/12 md:h-5/6 overflow-y-auto p-3"
     >
       <Notebook ref="nb" />
     </div>
@@ -54,7 +54,15 @@ function createStuff() {
   //   notebook.executeCell(cellId);
   // }, 1000 + Math.random() * 2000);
   const a=notebook.addCell(new CodeMessage("Q.data()"));
-  const b = notebook.addCell(new CodeMessage("Q.chart()"));
+  const b = notebook.addCell(new CodeMessage(`Q.chart(_.range(23).map(i=>_.random(100)), {
+          xaxis: {
+            labels: {
+              style: {
+                colors: "red",
+              },
+            },
+          },
+        })`));
   notebook.executeCell(a.id);
   notebook.executeCell(b.id);
 }

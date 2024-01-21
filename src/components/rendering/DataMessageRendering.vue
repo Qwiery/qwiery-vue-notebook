@@ -6,7 +6,7 @@
     <div class="my-2 w-full">
       <template v-if="props.message.renderType === 'data'">
         <vue3-datatable
-          v-if="renderChart"
+
           :rows="rows"
           :columns="cols"
           :loading="loading"
@@ -17,31 +17,24 @@
       </template>
       <template v-if="props.message.renderType === 'chart'">
         <div class="w-full h-full">
-          <apexchart
-            v-if="renderChart"
-            type="bar"
-            :options="chartOptions"
-            :series="series"
-          ></apexchart>
+         <ChartRendering :data="message.data" :renderOptions="message.renderOptions"></ChartRendering>
         </div>
       </template>
     </div>
   </div>
 </template>
 <script setup lang="ts">
-import { CodeMessage } from "@orbifold/entities";
+	import {  DataMessage } from "@orbifold/entities";
 import { NotebookController } from "~/components/NotebookController";
 import { onMounted, ref } from "vue";
 import Vue3Datatable from "@bhplugin/vue3-datatable";
 import _ from "lodash";
 import "@bhplugin/vue3-datatable/dist/style.css";
+import ChartRendering from "~/components/rendering/ChartRendering.vue";
 onMounted(() => {
   getUsers();
-  setTimeout(() => {
-    renderChart.value = true;
-  }, 500);
+
 });
-const renderChart = ref(false);
 const loading: any = ref(true);
 const rows: any = ref(null);
 const cols =
@@ -65,24 +58,10 @@ const getUsers = async () => {
   loading.value = false;
 };
 
-const series = [
-  {
-    name: "series-1",
-    data: [30, 40, 35, 50, 49, 60, 70, 91],
-  },
-];
-const chartOptions = {
-  chart: {
-    id: "vuechart-example",
-  },
-  xaxis: {
-    categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998],
-  },
-};
 
 const props = defineProps({
   message: {
-    type: CodeMessage,
+    type: DataMessage,
     required: true,
   },
   controller: {
@@ -95,6 +74,5 @@ const props = defineProps({
     default: "input",
   },
 });
-// debugger;
 
 </script>

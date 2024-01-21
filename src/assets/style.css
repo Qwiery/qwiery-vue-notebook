@@ -24,4 +24,6 @@ body{
  p{
         @apply text-gray-700 dark:text-gray-400
  }
-
+.grid-container {
+    @apply grid grid-cols-4 gap-4 !important;
+}

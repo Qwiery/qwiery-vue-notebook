@@ -5,8 +5,7 @@
          :key="tuple[0].executionId + tuple[0].hasHighlight + tuple[0].message.id"
          class="rounded p-2 "
          :class="{
-        'border-2':currentView === 'default',
-        'shadow-md':currentView === 'default',
+        'border':currentView === 'default',
         'hidden': tuple.length === 1 && currentView === 'dashboard',
         'col-span-1': tuple[0].colSpan === 1,
         'col-span-2': tuple[0].colSpan === 2,
@@ -14,7 +13,7 @@
         'col-span-4': tuple[0].colSpan === 4,
       }"
     >
-      <div>Works</div>
+
       <div>
         <template v-if="currentView === 'default'">
           <template v-if="tuple.length === 1">

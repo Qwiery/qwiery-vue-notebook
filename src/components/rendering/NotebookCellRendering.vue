@@ -16,10 +16,10 @@
               }">
                     <div class="flex" v-if="hasFocus">
                         <div class="w-full dark:bg-[#666] bg-gray-200 ml-0">
-                            <div class="grid grid-cols-4">
+                            <div class="grid-container">
                                 <div class="col-start-5 m-1 flex">
-                                    <div class="ml-1 cursor-pointer" @click="bigger()">⏶</div>
-                                    <div class="ml-1 cursor-pointer" @click="smaller()">⏷</div>
+                                    <div class="ml-1 cursor-pointer w-5 z-100" @click="bigger()">⏶</div>
+                                    <div class="ml-1 cursor-pointer w-5 z-100" @click="smaller()">⏷</div>
                                     <div class="ml-1 mt-0 cursor-pointer" @click="deleteCell()">
                                         <svg title="Delete cell" fill="#000000" width="16px" height="16px" viewBox="-2.94 0 31.716 31.716" xmlns="http://www.w3.org/2000/svg">
                         <g>
@@ -151,7 +151,10 @@ function setFocus() {
 }
 
 function deleteCell() {
-    props.controller.deleteCell(props.cell.message.id);
+    // props.controller.deleteCell(props.cell.message.id);
+	debugger
+	props.controller.setColSpan(props.cell.message.id, props.cell.colSpan - 1);
+
 }
 
 function bigger() {
@@ -159,6 +162,7 @@ function bigger() {
 }
 
 function smaller() {
+
     props.controller.setColSpan(props.cell.message.id, props.cell.colSpan - 1);
 }
 </script>
