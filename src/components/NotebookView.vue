@@ -204,6 +204,11 @@
 		controller.interpreters[commonName] = interpreter;
 	}
 
+	function setInputTransform( transform: ((message: Message) => Promise<Message>)) {
+
+		controller.inputTransform = transform;
+	}
+
 
 	/**
 	 * Expose the functions to the outside world.

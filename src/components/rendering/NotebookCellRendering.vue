@@ -22,11 +22,11 @@
 										<div class="ml-1 cursor-pointer w-5 z-100" @click="runCell()">
 											<icon-run class=" fill-[#000] dark:fill-[#fff]/70 stroke-[#000] dark:stroke-[#fff]/70 "></icon-run>
 										</div>
-										<div class="ml-1 cursor-pointer w-5 z-100" @click="bigger()">
-											<icon-expand class="fill-[#000] dark:fill-[#fff] stroke-[#000] dark:stroke-[#fff] "></icon-expand>
-										</div>
 										<div class="ml-1 cursor-pointer w-5 z-100" @click="smaller()">
 											<icon-shrink class="fill-[#000] dark:fill-[#fff]/70 stroke-[#000] dark:stroke-[#fff]/70 "></icon-shrink>
+										</div>
+										<div class="ml-1 cursor-pointer w-5 z-100" @click="bigger()">
+											<icon-expand class="fill-[#000] dark:fill-[#fff] stroke-[#000] dark:stroke-[#fff] "></icon-expand>
 										</div>
 										<div class="ml-1 mt-0 cursor-pointer" @click="deleteCell()">
 											<icon-bin class="fill-[#000] dark:fill-[#fff]/70 stroke-[#000] dark:stroke-[#fff]/70 "></icon-bin>

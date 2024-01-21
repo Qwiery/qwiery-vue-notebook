@@ -6,7 +6,7 @@ import {
 	CodeMessage,
 	NotebookCell,
 	TextMessage,
-	ErrorMessage,
+	ErrorMessage, MarkdownMessage,
 } from "@orbifold/entities";
 import { JsInterpreter } from "./JsInterpreter";
 import _ from "lodash";
@@ -18,7 +18,7 @@ import _ from "lodash";
  */
 export class NotebookController extends eventemitter3 {
 	public jsInterpreter = new JsInterpreter();
-
+	public inputTransform: ((message: Message) => Promise<Message>) | null = this.defaultInputTransform;
 	public interpreters: { [key: string]: (m: Message) => Promise<Message> } = {
 		"markdown": async (m: Message) => {
 			// the message is rendered as-is
@@ -44,6 +44,7 @@ export class NotebookController extends eventemitter3 {
 			// this.emit("update-cell", cell.message);
 		}
 	}
+
 
 	public model: Notebook = new Notebook();
 	/**
@@ -226,13 +227,15 @@ export class NotebookController extends eventemitter3 {
 		let outMessage: Message | null = null;
 
 		try {
+			if (this.inputTransform) {
+				message = await this.inputTransform(message);
+			}
 			switch (message.typeName) {
 				case "CodeMessage":
 					let language = (<CodeMessage>message).language.toString().trim();
 					if (Utils.isEmpty(language)) {
 						outMessage = ErrorMessage.fromString(`The notebook cell (of type CodeMessage) has no language defined.`);
-					}
-					else{
+					} else {
 						language = this.toCommonLanguageName(language);
 						if (Utils.isEmpty(language)) {
 							outMessage = ErrorMessage.fromString(`No interpreter defined for language '${(<CodeMessage>message).language}'.`);
@@ -288,4 +291,44 @@ export class NotebookController extends eventemitter3 {
 		return language;
 	}
 
+	public async defaultInputTransform(message: Message): Promise<Message> {
+
+		if (!message) {
+			return null;
+		}
+		if (message.typeName === "CodeMessage") {
+			let content = (<CodeMessage>message).code;
+			if (Utils.isEmpty(content)) {
+				return message;
+			}
+			if (content.indexOf("%js") > -1 || content.indexOf("%javascript") > -1) {
+				message.language = "javascript";
+			}
+			if (content.indexOf("%md") > -1 || content.indexOf("%markdown") > -1) {
+				content = content.replace(/%md/ig, "");
+				content = content.replace(/%markdown/ig, "");
+				const m =  MarkdownMessage.fromString(content);
+				// important: if you recast the message make sure the id is the same
+				m.id = message.id;
+				return m
+			}
+		}
+		if (message.typeName === "MarkdownMessage") {
+			let content = (<MarkdownMessage>message).text;
+			if (Utils.isEmpty(content)) {
+				return message;
+			}
+			if (content.indexOf("%js") > -1 || content.indexOf("%javascript") > -1) {
+				const m =  new CodeMessage(content.replace(/%js/ig, "").replace(/%javascript/ig, ""), "javascript");
+				// important: if you recast the message make sure the id is the same
+				m.id = message.id;
+				return m
+			}
+			if (content.indexOf("%md") > -1 || content.indexOf("%markdown") > -1) {
+				return message;
+			}
+		}
+
+		return message;
+	}
 }
