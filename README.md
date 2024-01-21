@@ -1,6 +1,7 @@
 # Vue/Nuxt Literate Programming Component
 
-![](./Screenshot.png)
+![](./ScreenshotWhite.png)
+![](./ScreenshotDark.png)
 This is a Vue/Nuxt component to render literate programming notebooks. It's part of the [Qwiery](https://qwiery.com) framework but you can use it independently.
 
 To set it up you need a Vue/Nuxt app and add the following dependencies:
